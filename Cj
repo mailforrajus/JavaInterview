@@ -1,0 +1,559 @@
+Hi Team,
+
+#Today's uploaded
+#value #labs #interview #questions #Answers
+1)Volatile key word why is it used in multi thread concept will the value changes
+Ans-Important point about volatile:
+Synchronization in Java is possible by using Java keywords synchronized and volatile and locks.
+In Java, we can not have synchronized variable. Using synchronized keyword with a variable is illegal and will result in compilation error. Instead of using the synchronized variable in Java, you can use the java volatile variable, which will instruct JVM threads to read the value of volatile variable from main memory and don’t cache it locally.
+If a variable is not shared between multiple threads then there is no need to use the volatile keyword.
+
+source
+
+Example usage of volatile:
+
+public class Singleton {
+
+    private static volatile Singleton _instance; // volatile variable
+
+    public static Singleton getInstance() {
+
+        if (_instance == null) {
+
+            synchronized (Singleton.class) {
+
+                if (_instance == null)
+
+                    _instance = new Singleton();
+
+            }
+
+        }
+
+        return _instance;
+
+    }
+
+}
+
+We are creating instance lazily at the time the first request comes.
+
+If we do not make the _instance variable volatile then the Thread which is creating the instance of Singleton is not able to communicate to the other thread. So if Thread A is creating Singleton instance and just after creation, the CPU corrupts etc, all other threads will not be able to see the value of _instance as not null and they will believe it is still assigned null.
+
+Why does this happen? Because reader threads are not doing any locking and until the writer thread comes out of a synchronized block, the memory will not be synchronized and value of _instance will not be updated in main memory. With the Volatile keyword in Java, this is handled by Java itself and such updates will be visible by all reader threads.
+
+Conclusion: volatile keyword is also used to communicate the content of memory between threads.
+
+Example usage of without volatile:
+
+public class Singleton{    
+
+    private static Singleton _instance;   //without volatile variable
+
+    public static Singleton getInstance(){   
+
+          if(_instance == null){  
+
+              synchronized(Singleton.class){  
+
+               if(_instance == null) _instance = new Singleton(); 
+
+      } 
+
+     }   
+
+    return _instance;  
+
+    }
+
+The code above is not thread-safe. Although it checks the value of instance once again within the synchronized block (for performance reasons), the JIT compiler can rearrange the bytecode in a way that the reference to the instance is set before the constructor has finished its execution. This means the method getInstance() returns an object that may not have been initialized completely. To make the code thread-safe, the keyword volatile can be used since Java 5 for the instance variable. Variables that are marked as volatile get only visible to other threads once the constructor of the object has finished its execution completely.
+
+Source
+
+enter image description here
+
+volatile usage in Java:
+
+The fail-fast iterators are typically implemented using a volatile counter on the list object.
+
+When the list is updated, the counter is incremented.
+
+When an Iterator is created, the current value of the counter is embedded in the Iterator object.
+
+When an Iterator operation is performed, the method compares the two counter values and throws a ConcurrentModificationException if they are different.
+
+The implementation of fail-safe iterators is typically light-weight. They typically rely on properties of the specific list implementation's data structures. There is no general pattern.
+
+2)Class level and object level synchronzation
+
+Ans-1. Static Variable Lock 
+
+?
+
+public class Test{
+
+ 
+
+  private static Map object = new ConcurrentHashMap();
+
+ 
+
+   public void obtainLock(){
+
+     synchronized(object){
+
+           object.put(value);
+
+    }
+
+ 
+
+   }
+
+ 
+
+}
+
+In this we are obtaining lock at the static object "object" level. Now 
+
+2. Class level Lock 
+
+?
+
+public class Test{
+
+ 
+
+  private static Map object = new ConcurrentHashMap();
+
+ 
+
+   public synchronized void obtainLock(){
+
+           object.put(value);
+
+   }
+
+       //OR
+
+  public  void obtainLock(){
+
+       synchronized(Test.class){
+
+           object.put(value);
+
+      } 
+
+   }
+
+ 
+
+}
+
+I think both 1 and 2 are same. The static variable "object" is thread safe. 
+
+Then what is the difference? 
+
+I think both are same. If we have more then one static variable to be synchronized then we need to go 
+
+for class level lock or we can go for static variable level lock right? 
+
+4)Difference betweeen String and String Buffer
+
+Ans-String
+
+String class is immutable.
+
+String is slow and consumes more memory when you concat too many strings because every time it creates new instance.
+
+String class overrides the equals() method of Object class. So you can compare the contents of two strings by equals() method.
+
+StringBuffer
+
+StringBuffer class is mutable.
+
+StringBuffer is fast and consumes less memory when you cancat strings.
+
+StringBuffer class doesn't override the equals() method of Object class.
+
+5)How can we verify if the object that we decerialize is same as the one that we serilaze
+
+Ans-To make it more clear, this is a quick example:
+
+class A implements Serializable { public B b; }
+
+class B implements Serializable { public A a; }
+
+A a = new A();
+
+B b = new B();
+
+a.b = b;
+
+b.a = a;
+
+So what happens if we serialize a and b objects into a file and deserialize from that file?
+
+I thought we get 4 objects, 2 of each. Identical objects but different instances.
+
+But I'm not sure if there's anything else or is it right or wrong.
+
+6)How jvm knows if class is serializable
+
+Ans-The decision to require that classes implement the java.io.Serializable interface was not made lightly. The design called for a balance between the needs of developers and the needs of the system to be able to provide a predictable and safe mechanism. The most difficult design constraint to satisify was the safety and security of Java classes.
+
+If classes were to be marked as being serializable, the design team worried that a developer, either out of forgetfulness, laziness, or ignorance might not declare a class as being Serializable and then make that class useless for RMI or for purposes of persistence. We worried that the requirement would place on a developer the burden of knowing how a class was to be used by others in the future, an essentially unknown condition. Indeed, our preliminary design, as reflected in the alpha API, concluded that the default case for a class ought to be that the objects in the class be serializable. We later changed our design only after security and correctness considerations convinced us that the default had to be that an object not be serialized.
+
+7)explain Polymorhism 
+
+Ans-Polymorphism is one of the OOPs feature that allows us to perform a single action in different ways. For example, lets say we have a class Animal that has a method sound(). Since this is a generic class so we can’t give it a implementation like: Roar, Meow, Oink etc. We had to give a generic message.
+
+public class Animal{
+
+   ...
+
+   public void sound(){
+
+      System.out.println("Animal is making a sound");   
+
+   }
+
+}
+
+Now lets say we two subclasses of Animal class: Horse and Cat that extends (see Inheritance) Animal class. We can provide the implementation to the same method like this:
+
+public class Horse extends Animal{
+
+...
+
+    @Override
+
+    public void sound(){
+
+        System.out.println("Neigh");
+
+    }
+
+}
+
+and
+
+public class Cat extends Animal{
+
+...
+
+    @Override
+
+    public void sound(){
+
+        System.out.println("Meow");
+
+    }
+
+}
+
+As you can see that although we had the common action for all subclasses sound() but there were different ways to do the same action. This is a perfect example of polymorphism (feature that allows us to perform a single action in different ways). It would not make any sense to just call the generic sound() method as each Animal has a different sound. Thus we can say that the action this method performs is based on the type of object.
+
+What is polymorphism in programming?
+
+Polymorphism is the capability of a method to do different things based on the object that it is acting upon. In other words, polymorphism allows you define one interface and have multiple implementations. As we have seen in the above example that we have defined the method sound() and have the multiple implementations of it in the different-2 sub classes.
+
+Which sound() method will be called is determined at runtime so the example we gave above is a runtime polymorphism example.
+
+Types of polymorphism and method overloading & overriding are covered in the separate tutorials. You can refer them here:
+
+1. Method Overloading in Java – This is an example of compile time (or static polymorphism)
+
+2. Method Overriding in Java – This is an example of runtime time (or dynamic polymorphism)
+
+3. Types of Polymorphism – Runtime and compile time – This is our next tutorial where we have covered the types of polymorphism in detail. I would recommend you to go though method overloading and overriding before going though this topic.
+
+Lets write down the complete code of it:
+
+Example 1: Polymorphism in Java
+
+Runtime Polymorphism example:
+
+Animal.java
+
+public class Animal{
+
+   public void sound(){
+
+      System.out.println("Animal is making a sound");   
+
+   }
+
+}
+
+Horse.java
+
+class Horse extends Animal{
+
+    @Override
+
+    public void sound(){
+
+        System.out.println("Neigh");
+
+    }
+
+    public static void main(String args[]){
+
+     Animal obj = new Horse();
+
+     obj.sound();
+
+    }
+
+}
+
+Output:
+
+Neigh
+
+Cat.java
+
+public class Cat extends Animal{
+
+    @Override
+
+    public void sound(){
+
+        System.out.println("Meow");
+
+    }
+
+    public static void main(String args[]){
+
+     Animal obj = new Cat();
+
+     obj.sound();
+
+    }
+
+}
+
+Output:
+
+Meow
+
+Example 2: Compile time Polymorphism
+
+Method Overloading on the other hand is a compile time polymorphism example.
+
+class Overload
+
+{
+
+    void demo (int a)
+
+    {
+
+       System.out.println ("a: " + a);
+
+    }
+
+    void demo (int a, int b)
+
+    {
+
+       System.out.println ("a and b: " + a + "," + b);
+
+    }
+
+    double demo(double a) {
+
+       System.out.println("double a: " + a);
+
+       return a*a;
+
+    }
+
+}
+
+class MethodOverloading
+
+{
+
+    public static void main (String args [])
+
+    {
+
+        Overload Obj = new Overload();
+
+        double result;
+
+        Obj .demo(10);
+
+        Obj .demo(10, 20);
+
+        result = Obj .demo(5.5);
+
+        System.out.println("O/P : " + result);
+
+    }
+
+}
+
+Here the method demo() is overloaded 3 times: first method has 1 int parameter, second method has 2 int parameters and third one is having double parameter. Which method is to be called is determined by the arguments we pass while calling methods. This happens at runtime compile time so this type of polymorphism is known as compile time polymorphism.
+
+Output:
+
+a: 10
+
+a and b: 10,20
+
+double a: 5.5
+
+O/P : 30.25
+
+8)what will happen if Super class methos throes ArrayIndexOutIfBounds and sub throws NullPointer.or super throes Class not found and sub class throws Null pinter exception.
+
+Ans-IndexOutOfBoundsException :Thrown to indicate that an index of some sort (such as to an array, to a string, or to a vector) is out of range.
+
+ArrayIndexOutOfBoundsException, StringIndexOutOfBoundsException are two classes, which have implemented IndexOutOfBoundsException.
+
+ArrayIndexOutOfBoundsException: Thrown to indicate that an array has been accessed with an illegal index. The index is either negative or greater than or equal to the size of the array.
+
+StringIndexOutOfBoundsException:Thrown by String methods to indicate that an index is either negative or greater than the size of the string. For some methods such as the charAt method, this exception also is thrown when the index is equal to the size of the string.
+
+9)what is Generics ? means in generics
+
+Ans-Generics allow you to customize a "generic" method or class to whatever type you're working with. For example, suppose you have a method that adds two numbers together. In order to work with the types themselves, you might have to create multiple versions of this method. For instance:
+
+public int Add(int a, int b)
+
+public double Add(double a, double b)
+
+public float Add(float a, float b)
+
+Generics allow you to create a single method that is customized for the type that invokes it.
+
+public T Add<T>(T a, T b)
+
+10)A class should extends only 2 interfaces using generics
+
+public <T, U extends T & IDisposable> void mapThis(
+
+        Class<? extends MyClass<T>> key,
+
+        Class<? extends U> value
+
+) { ... }
+
+In fact that's what came to my mind when I first saw this post. But this actually gives a compiler error:
+
+a type variable may not be followed by other bounds
+
+To help me explain why, I'd like to quote an Oracle Blogs post by Victor Rudometov about this error:
+
+This fact is not always clear, but it is true. The following code should not compile:
+
+interface I {}
+
+class TestBounds <U, T extends U & I> {
+
+}
+
+Because JLS Chapter 4 Types, Values, and Variables section 4.4 Type Variables states: "The bound consists of either a type variable, or a class or interface type T possibly followed by further interface types I1 , ..., In.". So one may use T extends U, T extends SomeClass & I, but not T extends U & I. This rule applies to all cases including type variables and bounds in methods and constructors.
+
+The reasons for this restriction are explored in a closely related post: Why can't I use a type argument in a type parameter with multiple bounds?
+
+To summarize, the restriction was imposed in order to "preclude certain awkward situations coming into existence" (JLS §4.9).
+
+What kind of awkward situations? An answer by Chris Povirk describes one:
+
+[A reason for the restriction is] the possibility of specifying illegal types. Specifically, extending a generic interface twice with different parameters. I can't come up with a non-contrived example, but:
+
+/** Contains a Comparator<String> that also implements the given type T. */
+
+class StringComparatorHolder<T, C extends T & Comparator<String>> {
+
+  private final C comparator;
+
+  // ...
+
+}
+
+void foo(StringComparatorHolder<Comparator<Integer>, ?> holder) { ... }
+
+Now holder.comparator is a Comparator<Integer> and a Comparator<String>.
+
+Chris also points to Sun bug 4899305, which was a bug contesting this language restriction. It was closed as Won't Fix with the following comment:
+
+If a type variable could be followed by type variables or by (possibly parameterized) interfaces, there would likely be more mutually recursive type variables, which are very difficult to handle. Things are already complicated when a bound is simply a parameterized type, e.g. <S,R extends Comparable<S>>. Consequently, bounds are not going to change now. Both javac and Eclipse agree that S&T and  S&Comparable<S> are illegal.
+
+So those are the reasons behind the restriction. Addressing generic methods specifically (which your question concerns), I'd like to further point out that type inference would theoretically cause such bounds to be pointless anyway.
+
+If we reexamine the type parameters declared in the hypothetical signature above:
+
+<T, U extends T & IDisposable>
+
+Assuming the caller isn't explicitly specifying T and U, this can be reduced to the following:
+
+<T, U extends Object & IDisposable>
+
+Or just this (subtle difference, but that's another topic):
+
+<T, U extends IDisposable>
+
+This is because T doesn't have any bounds, so no matter what type of arguments get passed in, T can always resolve to Object at the very least, and so then can U.
+
+Let's go back and say T is bounded:
+
+<T extends Foo, U extends T & IDisposable>
+
+This can be reduced in the same way (Foo could be a class or interface):
+
+<T extends Foo, U extends Foo & IDisposable>
+
+Based on that reasoning, the syntax you're trying to achieve is pointless as far as restricting the caller to more specific arguments.
+
+Pre-Java 8 addendum:
+
+Prior to Java 8, there is a use case for what you're trying to do. Because of a limitation with how the compiler infers generic method type parameters, my above reasoning to go out the window. Take the following generic method:
+
+class MyClass {
+
+    static <T> void foo(T t1, T t2) { }
+
+}
+
+This is a common beginner's mistake of trying to make a method that takes two parameters of the "same type". Of course it's pointless because of the way inheritance works:
+
+MyClass.foo("asdf", 42); // legal
+
+Here, T is inferred to be Object - this matches up with earlier reasoning about simplifying the mapThis type parameters. You have to manually specify the type parameters in order to achieve the intended type checking:
+
+MyClass.<String>foo("asdf", 42); // compiler error
+
+However, and here's where your use case starts to come in, it's a different matter with multiple type parameters with staggered bounds:
+
+class MyClass {
+
+    static <T, U extends T> void foo(T t, U u) { }
+
+}
+
+Now this call errors:
+
+MyClass.foo("asdf", 42); // compiler error
+
+The tables have turned - we have to manually relax the type parameters to get it to compile:
+
+MyClass.<Object, Object>foo("asdf", 42); // legal
+
+11) how to restrict valu
+
+Ans-CREATE TABLE SomeTable
+
+(
+
+   Id int NOT NULL,
+
+   Frequency varchar(200),
+
+   CONSTRAINT chk_Frequency CHECK (Frequency IN ('Daily', 'Weekly', 'Monthly', 'Yearly'))
+
+)

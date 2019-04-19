@@ -1,0 +1,53 @@
+#Core #Java #stuff
+#We will expect subscribe/Share the channel and your feedback, in order to improve our tutorial's content or delivery spech...
+#Java #Thread #Part-3 
+Q1. Can we start() method method more than one, although this thread started ?
+Q2. What will the problem if we run our thread using run() method instead of start() method ?
+Q3. What is the purpose of yield() and join() method ?
+Q4. How to set a Thread as an Daemon and set thread priority and name ?
+
+Youtube Link : https://youtu.be/_VYe5e2fZ90
+
+Code Example :
+
+package com.youtube.techtalk;
+
+public class T1 extends Thread {
+
+ @Override
+ public void run() {
+ System.out.println("I am in child Thread");
+ System.out.println("Name is : " + Thread.currentThread().getName());
+ for (int i = 1; i <= 5; i++) {
+ System.out.println(" : " + i);
+ Thread.yield();
+
+ }
+ }
+
+ public static void main(String[] args) throws InterruptedException {
+ System.out.println("I am in main Thread");
+ System.out.println("Name is : " + Thread.currentThread().getName());
+ T1 t1 = new T1();
+ t1.setName("Thread -1"); // Setting Thread name
+ t1.setDaemon(true); // Setting the Thread as a Daemon
+ t1.setPriority(MAX_PRIORITY); // Setting the priority of the thread.
+ t1.start();
+ // t1.start() - not possible you will get "ThreadIllegealStateException"
+ // t1.run() - will not give any error, but it will not create another
+ // thread. it will run under the main Thread. So MultiThreading concept
+ // is no building
+ t1.join(); // this method is used in order to sequence thread execution
+
+ T1 t2 = new T1();
+ t2.setName("Thread -2");
+ t2.start();
+ t2.join();
+
+ T1 t3 = new T1();
+ t3.setName("Thread -3");
+ t3.start();
+
+ }
+
+}

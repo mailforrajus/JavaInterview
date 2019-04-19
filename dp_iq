@@ -1,0 +1,55 @@
+Hi Team,
+
+#Today's #uploaded  #Real  #Time
+#Design  #Pattern  #Interview  #Questions #Answer
+1.What is Singleton Pattern in Java?
+Answer:
+Singleton pattern is a creational pattern which allows only one instance of a class to be created which will be available to the whole application. The major advantage of Singleton design pattern is its saves memory because the single instance is reused again and again; there is no need to create a new object at each request. For example, in our application, we can use a single database connection shared by multiple objects, instead of creating a database connection for every request.
+
+2.What are the drawbacks of using singleton design pattern?
+Answer:
+The major drawbacks of using singleton design pattern are:
+a)Singleton causes code to be tightly coupled. The singleton object is exposed globally and is available to a whole application. Thus, classes using this object become tightly coupled; any change in the global object will impact all other classes using it.
+b)They hide dependencies instead of exposing them.
+c)Singleton Pattern does not support inheritance.
+d)Singleton principle can be violated by techniques such as cloning. If an application is running on multiple JVM’s, then, in this case, Singleton might be broken.
+
+3.Which design pattern will you use to create a complex object?
+Answer:
+Builder design pattern is used to construct a complex object. It is designed to solve the issues with factory and abstract design pattern.
+
+4.Why use a factory class to instantiate a class when we can use new operator?
+Answer:
+Factory classes provide flexibility in terms of design. Below are some of the benefits of factory class:
+•Factory design pattern results in more decoupled code as it allows us to hide creational logic from dependant code
+•It allows us to introduce an Inversion of Control container
+•It gives you a lot more flexibility when it comes time to change the application as our creational logic is hidden from dependant code
+
+5.What is the difference between factory and abstract factory design pattern?
+Answer:
+Both factory and abstract factory are creational design patterns. The major difference between these two is, a factory pattern creates an object through inheritance and produces only one Product. On the other hand, an abstract factory pattern creates the object through composition and produce families of products.
+
+6.What is observer design pattern in Java?
+Answer:
+Observer design pattern is one of the behavioral design patterns which defines one-to-many dependencies between objects & is useful when we are interested in a state of an object and we want to get notified when there is any change in state of Object. In Observer design pattern, when one object changes its state, all its dependent objects are automatically notified, the object is called Subject and dependants are called Observers. Java provides libraries to implement Observer design pattern using java.util.Observable class & java.util.Observer interface.
+
+7.Difference between strategy and state design pattern in Java?
+Answer:
+Both Strategy, as well as state design pattern, are similar in practice but they have different implementation following are some of the major differences between these two:
+a.Strategy design pattern defines a set of algorithms to carry out a specific behavior whereas State design pattern allows an object to alter its behavior when it’s internal state changes.
+b.Strategy design pattern does not allow us to store a reference to the context object whereas state design pattern stores the reference to the context object which contains them.
+c.In strategy design pattern the client is aware of the strategy which is chosen for implementation whereas in state design pattern the client does not decide which state to be chosen for implementation.
+d.Strategy pattern deals with HOW an object performs a certain task whereas state design pattern deals with what an object is.
+e.There is no successor/predecessor relationship present in strategy design pattern whereas in state design pattern states are related to one/another as successor & predecessor.
+
+8.What is null Object Pattern?
+Answer:
+Null Object pattern is a design pattern in which null object replaces NULL check for instance variable. Instead of putting a check for a null value, Null Object reflects a do nothing relationship. It can also be used to provide default behavior in case data is not available.
+
+9.Give an example of decorator design pattern?
+Answer:
+The decorator pattern, also known as a structural pattern is used to add additional functionality to a particular object at runtime. It wraps the original object through decorator object. For example, when you are buying a burger, you can customize it by adding extra filling and sauces, now the cost of these items have to be added to the final price. The customization will differ from customer to customer and offer from a shop. Creating different classes of burger with different fillings will end up creating a lot of classes. Decorator solves this problem by extending the functionality of single Burger class at runtime based on customer request.
+
+10.What is the benefit of using prototype design pattern over creating an instance using the new keyword?
+Answer:
+Sometimes, object creation is heavyweight and requires a lot of resources, creating a new instance will impact the performance. In such cases, a prototype design pattern is used which refers to creating duplicate objects. In prototype design pattern, if a similar object is already present then cloning is done keeping performance in mind.

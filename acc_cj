@@ -1,0 +1,65 @@
+Hi Team,
+
+#Today's uploaded
+#Accenture #Java #Interview #Questions & #Answers
+#Accenture #interview #question #for #Java 3-8 #year #experience .
+  
+Q1. Why do you want to work in this industry / company?
+
+Ans: First you should try to convince that this company gives huge opportunity in many aspect i.e. new technologies implementation, the policy of company suits you like professionalism.   Also you can mention that you are big fan of this company and its your dream company. Basically show your all positive attitude towards company.
+
+Q2. Which location do you want to work in and why?
+
+Ans : Give your own choice. Also mention a valid reason for why you are interested for that location. The reason should be always positive and clear. Example :- you can support your family from this location,
+
+Q3. Describe a problem you faced and how you deal with it ?
+
+Ans : You can describe any issue you faced during your project work in the organization. And what the solution you have implemented for that issue.
+
+Q4. What are the types of class loaders in Java?
+
+Ans  :  As per my knowledge there are basically 3 types of class loader like bootstarp classloader,extension class loader and system class loader.
+Bootstrap Class Loader
+Bootstrap class loader loads java’s core classes like java.lang, java.util etc. These are classes that are part of java runtime environment. Bootstrap class loader is native implementation and so they may differ across different JVMs.
+ Extensions Class Loader
+JAVA_HOME/jre/lib/ext contains jar packages that are extensions of standard core java classes. Extensions class loader loads classes from this ext folder. Using the system environment propery java.ext.dirs you can add ‘ext’ folders and jar files to be loaded using extensions class loader
+System Class Loader
+                  Java classes that are available in the java classpath are loaded using System class loader
+
+Q5. Write your own ArrayList in Java ?
+      Your own code here .
+
+Q6. How to read and write image from a file ?
+
+Ans : You can use ImageIo.read() and ImageIO.write()  method of javax.imageio package.
+
+Q7. What is difference between static and init block in java.
+Answer Here.
+
+Q8. How ConcurrentHashMap works?
+
+Ans : The basic design of ConcurrentHashMap is to handling threading. Basically it locks each of the box (by default 16) which can be locked independently and thread safe for operation. And it does not expose the internal lock process.
+
+Q9. Can a static block throw exception?
+
+Ans : Yes. We can throw checked exception.
+
+Q10. What is difference between iterator access and index access?
+
+Ans : Basically iterator access process the traverse operation through each element, where index access process access direct the element by using the index.
+
+Q11. Why character array is better than string for storing password in java?
+
+Ans : Because, character array stores data in encrypted format which is not readable by human. But,the string stores the data in human readable format which is not secure.
+
+Q12. what is daemon thread in java ?
+
+Ans : A daemon thread is normally runs on background. And it does not prevent the JVM from exiting when the program finishes but the thread is still running.
+
+Q13. What is Java Reflection API?
+
+Ans  : Reflection is one of the most powerful api which help to work with classes, methods and variables  dynamically. Basically it inspect the class attributes at runtime. Also we can say it provides a metadata about the class. 
+
+Q14. What is the difference between Serializable and Externalizable interfaces? 
+
+Ans : Both interfaces are used for implement serialization. But, the basic difference is Serializable interface does not have any method (it’s a marker interface ) and Externalizable interface having 2 methods such as readExternal() and writeExternal(). Serializable interface is the super interface for Externalizable interface.
